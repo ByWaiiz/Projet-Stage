@@ -13,5 +13,6 @@ CREATE TABLE users
 CREATE TABLE cards (
     id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
     card_owner INT DEFAULT NULL,
-    card_number INT DEFAULT NULL,    
+    card_number INT DEFAULT NULL,   
+    card_points INT DEFAULT NULL   
 );
