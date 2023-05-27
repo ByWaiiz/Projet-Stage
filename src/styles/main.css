@@ -19,7 +19,7 @@ body{
     height: 100vh;
 }
 
-.login {
+.box {
     width: 300px;
     margin: 50px;
 	padding: 20px;
@@ -27,26 +27,26 @@ body{
     border-radius: 10px;
     box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
 }
-.login label {
+.box label {
     margin-bottom: 5px;
 }
-.login h3 {
+.box h3 {
     text-align: center;
 }
 
-.login form {
+.box form {
     display: flex;
     flex-direction: column;
 }
 
-.login input {
+.box input {
     padding: 10px;
 	border-radius: 5px;
 	margin-bottom: 20px;
     border: 1px solid #ccc;
 }
 
-.login #login {
+.box #login, #register {
     background-color: #00aeff;
 	color: white;
 	padding: 10px;
