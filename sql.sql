@@ -1,4 +1,4 @@
-CREATE TABLE utilisateurs 
+CREATE TABLE users 
 (
      id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
      username VARCHAR(30) DEFAULT NULL, 
@@ -8,4 +8,10 @@ CREATE TABLE utilisateurs
      card_number INT DEFAULT NULL, 
      role VARCHAR(15) DEFAULT NULL, 
      password VARCHAR(255) DEFAULT NULL
+);
+
+CREATE TABLE cards (
+    id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+    card_owner INT DEFAULT NULL,
+    card_number INT DEFAULT NULL,    
 );
