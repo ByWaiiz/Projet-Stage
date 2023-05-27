@@ -1,0 +1,11 @@
+CREATE TABLE utilisateurs 
+(
+     id INT PRIMARY KEY NOT NULL AUTO_INCREMENT,
+     username VARCHAR(30) DEFAULT NULL, 
+     firstname VARCHAR(30) DEFAULT NULL, 
+     lastname VARCHAR(30) DEFAULT NULL, 
+     email VARCHAR(30) DEFAULT NULL, 
+     card_number INT DEFAULT NULL, 
+     role VARCHAR(15) DEFAULT NULL, 
+     password VARCHAR(255) DEFAULT NULL
+);
