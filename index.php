@@ -8,6 +8,9 @@
 <div class="container">
     <div class="content">
         <?php
+
+            require('./src/tools/db.php');
+
             if(isset($_GET['register']))
             {
                 if($_GET['register'] == true)
@@ -20,19 +23,77 @@
                             $firstname = $_POST['firstname'];
                             $lastname = $_POST['lastname'];
                             $email = $_POST['email'];
-                            $date = $_POST['date'];
+                            $date = date("d-m-Y", strtotime($_POST['date']));
                             $card_number = $_POST['card_number'];
-                            $password = $_POST['password'];
+                            $password = sha1($_POST['password']);
 
-                            
+                            $requser = $pdo->prepare("SELECT * FROM users WHERE username=? AND email=?");
+                            $requser->execute(array($username, $email));
+                            $userexist = $requser->rowCount();
 
+                            $reqcard = $pdo->prepare("SELECT * FROM cards WHERE card_number=?");
+                            $reqcard->execute(array($card_number));
+                            $cardexist = $reqcard->rowCount();
+
+
+                            $card_number_lenght = strlen($card_number);
+                            $username_lenght = strlen($username);
+                            $password_lenght = strlen($password);
+
+
+
+                            if($userexist == 0){
+                                if($card_number_lenght == 13){
+                                    if($cardexist == 1){
+                                        if (preg_match('#^[a-zA-Z0-9]*$#', $username)) {
+                                            if($username_lenght > 3 AND $username_lenght < 30)
+                                            {
+                                                if(filter_var($email, FILTER_VALIDATE_EMAIL))
+                                                {
+                                                    $insert = $pdo->prepare("INSERT INTO users (username,firstname, lastname, email,card_number,dn,password) 
+                                                    VALUES ('$username', '$firstname', '$lastname', '$email', '$card_number', '$date', '$password')");
+                                                    if ($insert->execute()) {
+
+                                                        $reqCardOwner = $pdo->prepare("SELECT * FROM users WHERE username=? AND email=?");
+                                                        $reqCardOwner->execute(array($username, $email));
+                                                        $owner = $reqCardOwner->fetch();
+                                                    
+                                                        $updateCard = $pdo->prepare("UPDATE cards SET card_owner=:card_owner WHERE card_number=:card_number");
+                                                        $updateCard->execute([
+                                                            ':card_owner' => $owner['id'],
+                                                            ':card_number' => $card_number
+                                                        ]);
+
+                                                        session_start();
+                                                        $_SESSION['id'] = $owner['id'];
+                                                        $_SESSION['role'] = $owner['role'];
+                                                        header('location:./src/pages/profile.php');
+
+                                                    }
+                                                }else{
+                                                    // Email
+                                                }
+                                            }else{
+                                                // Username Lenght
+                                            }
+                                        }else{
+                                             // Username content
+                                        }
+                                    }else{
+                                        // Cardexist
+                                    }
+                                }else{
+                                    // CardLenght
+                                }
+                             }else{
+                                 // Userexist
+                             }
                         }else{
                             echo 'error';
                         }
                     }
                     
-                    
-
+            
         ?>
         <div class="box">
             <h3>Inscription</h3>
