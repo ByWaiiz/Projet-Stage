@@ -1,4 +1,8 @@
-
+<?php 
+    session_start();
+    if(!isset($_SESSION['id']) AND !isset($_SESSION['role']))
+    {
+?>
 
 <title>Anka Supermarché</title>
 <link rel="stylesheet" href="src/styles/main.css">
@@ -64,10 +68,9 @@
                                                             ':card_number' => $card_number
                                                         ]);
 
-                                                        session_start();
                                                         $_SESSION['id'] = $owner['id'];
                                                         $_SESSION['role'] = $owner['role'];
-                                                        header('location:./src/pages/profile.php');
+                                                        header('location:./src/pages/profile.php?id='. $_SESSION['id']);
 
                                                     }
                                                 }else{
@@ -92,8 +95,6 @@
                             echo 'error';
                         }
                     }
-                    
-            
         ?>
         <div class="box">
             <h3>Inscription</h3>
@@ -119,14 +120,39 @@
         <?php
                 }
             }else{
+                if(isset($_POST['login']))
+                {
+                    if(!empty($_POST['email_login']) AND !empty($_POST['password_login']))
+                    {
+                        $email_login = $_POST['email_login'];
+                        $password_login = sha1($_POST['password_login']);
+
+                        $requser_login = $pdo->prepare("SELECT * FROM users WHERE password=? AND email=?");
+                        $requser_login->execute(array($password_login, $email_login));
+                        $userexist_login = $requser_login->rowCount();
+                        $owner_login = $requser_login->fetch();
+
+
+                        if($userexist_login == 1)
+                        {
+                            $_SESSION['id'] = $owner_login['id'];
+                            $_SESSION['role'] = $owner_login['role'];
+                            header('location:./src/pages/profile.php?id='. $_SESSION['id']);
+                        }else{
+                            /// User Error
+                        }
+                    }else{
+                        echo 'error';
+                    }
+                }
         ?>
         <div class="box">
             <h3>Se connecter</h3>
             <form method="POST">
-                <label for="username">Nom d'utilisateur : </label>
-                <input type="text" name="username_login" id="username_login" placeholder="Nom d'utilisateur">
+                <label for="email">E-Mail : </label>
+                <input type="text" name="email_login" id="email_login" placeholder="E-Mail">
                 <label for="password">Mot de passe : </label>
-                <input type="password" name="password" id="password" placeholder="Mot de passe">
+                <input type="password" name="password_login" id="password_login" placeholder="Mot de passe">
                 <input type="submit" name="login" id="login" value="Se connecter">
             </form>
             <a href="index.php?register=true">Inscription</a>
@@ -136,3 +162,8 @@
         ?>
     </div>
 </div>
+<?php 
+    }else{
+        header('location:./src/pages/profile.php?id='. $_SESSION['id']);
+    }
+?>
