@@ -70,8 +70,13 @@
 
                                                         $_SESSION['id'] = $owner['id'];
                                                         $_SESSION['role'] = $owner['role'];
-                                                        header('location:./src/pages/profile.php?id='. $_SESSION['id']);
 
+                                                        if($_SESSION['role'] == 'admin')
+                                                        {
+                                                            header('location:./src/pages/gestion.php');
+                                                        }else{
+                                                            header('location:./src/pages/profile.php?id='. $_SESSION['id']);
+                                                        }
                                                     }
                                                 }else{
                                                     // Email
