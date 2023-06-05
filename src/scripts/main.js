@@ -1,11 +1,15 @@
-var card_id;
+let card_id;
 
 
 function returnId(id)
 {
-   
+   if(id)
+   {
     card_id = id;
-    console.log(id)
+   }else{
+    return 0;
+   }
 }
 
-console.log(card_id)
+
+function giveCardToUser()
